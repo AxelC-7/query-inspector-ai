@@ -9,4 +9,6 @@ class ReadOnlySqlGuardTest {
  @Test void rejectsUnknownObject(){assertThrows(IllegalArgumentException.class,()->guard.validate("SELECT * FROM USERS",Set.of("FACTURAS")));}
  @Test void rejectsMultipleStatements(){assertThrows(IllegalArgumentException.class,()->guard.validate("SELECT ID FROM FACTURAS; DELETE FROM FACTURAS",Set.of("FACTURAS")));}
  @Test void rejectsForUpdate(){assertThrows(IllegalArgumentException.class,()->guard.validate("SELECT ID FROM FACTURAS FOR UPDATE",Set.of("FACTURAS")));}
+ @Test void rejectsOraclePackages(){assertThrows(IllegalArgumentException.class,()->guard.validate("SELECT DBMS_LOCK.SLEEP(5) FROM DUAL",Set.of("DUAL")));}
+ @Test void rejectsSequences(){assertThrows(IllegalArgumentException.class,()->guard.validate("SELECT SEQ_FACTURAS.NEXTVAL FROM DUAL",Set.of("DUAL")));}
 }
