@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: query-inspector-ai
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      read-only: true
+      connection-timeout: 20000
+app:
+  database:
+    default-schema: ${DB_SCHEMA}
+    query-timeout-seconds: 20
+    max-rows: 200
+  ai:
+    gemini:
+      base-url: https://generativelanguage.googleapis.com
+      api-key: ${GEMINI_API_KEY}
+      model: ${GEMINI_MODEL:gemini-2.5-flash}
+      timeout-seconds: 60
+server:
+  port: 8080
