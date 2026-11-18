@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 @Component
 public class ReadOnlySqlGuard {
- private static final Pattern OBJECT=Pattern.compile("(?i)\\b(?:FROM|JOIN)\\s+([A-Z0-9_$#\\.\\\\\"]+)");
+ private static final Pattern OBJECT=Pattern.compile("(?i)\\b(?:FROM|JOIN)\\s+([A-Z0-9_$#\\.\\\"]+)");
  private static final Pattern SIDE_EFFECT=Pattern.compile("(?i)\\b(?:DBMS_|UTL_|SYS\\.)[A-Z0-9_$#]*|\\b(?:NEXTVAL|CURRVAL)\\b|@");
  private static final Set<String> BLOCKED=Set.of("INSERT","UPDATE","DELETE","MERGE","DROP","ALTER","CREATE","TRUNCATE","GRANT","REVOKE","COMMIT","ROLLBACK","EXECUTE","CALL","DECLARE","BEGIN","LOCK","INTO");
  public void validate(String sql,Set<String> allowedObjects){
@@ -19,7 +19,7 @@ public class ReadOnlySqlGuard {
   for(String token:BLOCKED) if(Pattern.compile("(?s).*\\b"+Pattern.quote(token)+"\\b.*").matcher(u).matches()) throw new IllegalArgumentException("Operación SQL bloqueada: "+token);
   Matcher m=OBJECT.matcher(s);
   while(m.find()){
-   String object=m.group(1).replace("\\\"","").toUpperCase(Locale.ROOT);
+   String object=m.group(1).replace("\"","").toUpperCase(Locale.ROOT);
    String simple=object.contains(".")?object.substring(object.lastIndexOf('.')+1):object;
    if(!allowedObjects.contains(simple)&&!allowedObjects.contains(object)) throw new IllegalArgumentException("Objeto fuera de allowlist: "+object);
   }
